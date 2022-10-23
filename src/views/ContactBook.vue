@@ -34,6 +34,7 @@
         </div>
     </div>
 </template>
+
 <script>
 import ContactCard from "@/components/ContactCard.vue";
 import InputSearch from "@/components/InputSearch.vue";
@@ -45,7 +46,7 @@ export default {
         InputSearch,
         ContactList,
     },
-    date() {
+    data() {
         return {
             contacts: [],
             activeIndex: -1,
@@ -53,17 +54,21 @@ export default {
         };
     },
     watch: {
+        // Giám sát các thay đổi của biến searchText.
+        // Bỏ chọn phần tử đang được chọn trong danh sách.
         searchText() {
             this.activeIndex = -1;
         },
     },
     computed: {
-        contactString() {
+        // Chuyển các đối tượng contact thành chuỗi để tiện cho tìm kiếm.
+        contactStrings() {
             return this.contacts.map((contact) => {
                 const { name, email, address, phone } = contact;
                 return [name, email, address, phone].join("");
             });
         },
+        // Trả về các contact có chứa thông tin cần tìm kiếm.
         filteredContacts() {
             if (!this.searchText) return this.contacts;
             return this.contacts.filter((_contact, index) =>
@@ -75,13 +80,13 @@ export default {
             return this.filteredContacts[this.activeIndex];
         },
         filteredContactsCount() {
-            return this.filteredContacts.lenght;
+            return this.filteredContacts.length;
         },
     },
     methods: {
-        async retrieveContact() {
+        async retrieveContacts() {
             try {
-                this.contacts = await ContactService.getALl();
+                this.contacts = await ContactService.getAll();
             } catch (error) {
                 console.log(error);
             }
@@ -107,13 +112,13 @@ export default {
     mounted() {
         this.refreshList();
     },
-
 };
 </script>
-
-<style>
+<style scoped>
 .page {
     text-align: left;
     max-width: 750px;
 }
 </style>
+
+      
